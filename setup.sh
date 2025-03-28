@@ -94,7 +94,7 @@ kubectl apply --filename argocd-app.yaml
 
 echo "## Which Hyperscaler do you want to use?" | gum format
 echo 'By choosing `none`, resources will not be created in any of the hyperscalers, but the rest of the demo will still work.' | gum format
-HYPERSCALER=$(gum choose "google" "aws" "azure" "none")
+export HYPERSCALER=$(gum choose "google" "aws" "azure" "none")
 echo "export HYPERSCALER=$HYPERSCALER" >> .env
 
 if [[ "$HYPERSCALER" == "google" ]]; then
