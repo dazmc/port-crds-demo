@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/vfarcic/port-crds-demo
+    repoURL: https://github.com/dazmc/port-crds-demo
     targetRevision: HEAD
     path: apps
   destination:

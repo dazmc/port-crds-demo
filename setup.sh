@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -ev
 
 gum confirm '
 Are you ready to start?
@@ -12,8 +12,9 @@ rm -f .env
 # Setup #
 #########
 
-GITHUB_NAME=$(gh repo view --json nameWithOwner \
+export GITHUB_NAME=$(gh repo view --json nameWithOwner \
     --jq .nameWithOwner)
+echo $GITHUB_NAME
 echo "export GITHUB_NAME=$GITHUB_NAME" >> .env
 
 echo "# Open https://getport.io and *Login*" | gum format
@@ -22,14 +23,15 @@ gum input --placeholder "Press the enter key to continue."
 PORT_CLIENT_ID=$(gum input --placeholder "Port Client ID" --value "$PORT_CLIENT_ID")
 echo "export PORT_CLIENT_ID=$PORT_CLIENT_ID" >> .env
 
+echo gh secret set PORT_CLIENT_ID --body $PORT_CLIENT_ID --app actions --repos $GITHUB_NAME
 gh secret set PORT_CLIENT_ID --body $PORT_CLIENT_ID \
-    --app actions --repos $GITHUB_NAME
+    --app actions --repo $GITHUB_NAME 
 
 PORT_CLIENT_SECRET=$(gum input --placeholder "Port Client ID" --value "$PORT_CLIENT_SECRET" --password)
 echo "export PORT_CLIENT_ID=$PORT_CLIENT_ID" >> .env
 
 gh secret set PORT_CLIENT_SECRET --body $PORT_CLIENT_SECRET \
-    --app actions --repos $GITHUB_NAME
+    --app actions --repo $GITHUB_NAME
 
 echo "## Install Port's GitHub app (https://docs.getport.io/build-your-software-catalog/sync-data-to-catalog/git/github/#installation)." \
     | gum format
